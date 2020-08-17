@@ -14,17 +14,30 @@
             Score: {{ holesData[n-1].score }}
           </v-card-text>
           <RoundMap class="round-map" :holeData="holesData[n-1]"/>
-          <!-- <v-list two-line avatar>
-            <v-list-item
-              v-for="(shot, i) in holesData[n-1].shots"
-              :key="i"
-            >
-              <v-list-item-avatar tile color="black">
-                <span class="white--text">{{ getClubUsed(shot.club) }}</span>
-              </v-list-item-avatar>
-              {{ (shot.distance * 1.09361).toFixed(2) }}yds
-            </v-list-item>
-          </v-list> -->
+          <v-simple-table>
+            <tbody>
+              <tr
+                v-for="(shot, i) in holesData[n-1].shots"
+                :key="i"
+              >
+                <td>{{ i + 1 }}.</td>
+                <td v-if="shot.strokeType != 'Penalty'">
+                  <v-list-item-avatar color="black">
+                    <span class="white--text">{{ getClubUsed(shot.club) }}</span>
+                  </v-list-item-avatar>
+                </td>
+                <td v-else>
+                  Penalty
+                </td>
+                <td class="text-capitalize">{{ shot.lie }}</td>
+                <td v-if="!shot.lostBall && shot.strokeType != 'Penalty'" class="font-weight-bold">{{ getShotDistance(shot.distance) }}</td>
+                <td v-else-if="!shot.lostBall"></td>
+                <td v-else><v-icon color="red">mdi-close-circle-outline</v-icon></td>
+                <td v-if="!shot.lostBall && shot.strokeType != 'Penalty'">{{ getShotDistance(shot.remaining) }}</td>
+                <td v-else></td>
+              </tr>
+            </tbody>
+          </v-simple-table>
         </v-card>
 
       </v-window-item>
@@ -108,6 +121,13 @@ export default {
       }
 
       return 'X'
+    },
+    getShotDistance (distance) {
+      if (distance > 15) {
+        return (distance * 1.09361).toFixed(2) + 'yds'
+      } else {
+        return (distance * 3.281).toFixed(2) + 'ft'
+      }
     }
   }
 }
