@@ -4,7 +4,10 @@
       <v-col
         v-for="round in rounds"
         :key="round.roundID"
-        cols="4"
+        cols="12"
+        md="6"
+        lg="4"
+        xl="3"
       >
         <v-card>
           <v-list-item two-line>
