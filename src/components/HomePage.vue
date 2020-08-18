@@ -20,7 +20,9 @@
               size="80"
               color="grey"
               class="white--text"
-            >{{ scoreVsPar(round.avgScoreVsPar) }}</v-list-item-avatar>
+            >
+              {{ scoreVsPar(round.avgScoreVsPar) }}
+            </v-list-item-avatar>
           </v-list-item>
           <v-card-text>
             <v-subheader>Fairways in Regulation</v-subheader>

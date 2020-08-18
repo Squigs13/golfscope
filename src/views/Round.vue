@@ -1,48 +1,10 @@
 <template>
-  <v-card flat>
-    <v-card-title>{{ round.courseName }}</v-card-title>
-    <v-window v-model="holes">
-      <v-window-item
-        v-for="n in numberOfHoles"
-        :key="`card-${n}`"
-      >
-        <v-card class="mx-auto" max-width="800">
-          <v-card-title>
-            Hole {{ n }}
-          </v-card-title>
-          <v-card-text>
-            Score: {{ holesData[n-1].score }}
-          </v-card-text>
-          <RoundMap class="round-map" :holeData="holesData[n-1]"/>
-          <v-simple-table>
-            <tbody>
-              <tr
-                v-for="(shot, i) in holesData[n-1].shots"
-                :key="i"
-              >
-                <td>{{ i + 1 }}.</td>
-                <td v-if="shot.strokeType != 'Penalty'">
-                  <v-list-item-avatar color="black">
-                    <span class="white--text">{{ getClubUsed(shot.club) }}</span>
-                  </v-list-item-avatar>
-                </td>
-                <td v-else>
-                  Penalty
-                </td>
-                <td class="text-capitalize">{{ shot.lie }}</td>
-                <td v-if="!shot.lostBall && shot.strokeType != 'Penalty'" class="font-weight-bold">{{ getShotDistance(shot.distance) }}</td>
-                <td v-else-if="!shot.lostBall"></td>
-                <td v-else><v-icon color="red">mdi-close-circle-outline</v-icon></td>
-                <td v-if="!shot.lostBall && shot.strokeType != 'Penalty'">{{ getShotDistance(shot.remaining) }}</td>
-                <td v-else></td>
-              </tr>
-            </tbody>
-          </v-simple-table>
-        </v-card>
-
-      </v-window-item>
-    </v-window>
-
+  <div>
+    <div class="text-center text-h5 mt-4">
+      {{ round.courseName }}
+    </div>
+    <div class="text-center text-caption mb-4">{{ round.startedDate | moment("HH:mm DD MMM YYYY") }}</div>
+  <v-card class="mx-auto mt-4" max-width="800">
     <v-card-actions class="justify-space-between">
       <v-btn
         text
@@ -76,7 +38,55 @@
         <v-icon>mdi-chevron-right</v-icon>
       </v-btn>
     </v-card-actions>
+    <v-window v-model="holes">
+      <v-window-item
+        v-for="n in numberOfHoles"
+        :key="`card-${n}`"
+      >
+        <div class="d-flex justify-space-between align-center">
+          <div class="pl-6">Hole {{ n }}</div>
+          <div>Par: {{ holesData[n-1].par }}</div>
+          <div>Hole Avg: {{ holesData[n-1].avgScore }}</div>
+          <div>
+            <v-avatar
+              tile
+              size="60"
+              color="primary"
+              class="white--text"
+            >
+              {{ holesData[n-1].score }}
+            </v-avatar>
+          </div>
+        </div>
+        <RoundMap class="round-map" :holeData="holesData[n-1]"/>
+        <v-simple-table>
+          <tbody>
+            <tr
+              v-for="(shot, i) in holesData[n-1].shots"
+              :key="i"
+            >
+              <td>{{ i + 1 }}.</td>
+              <td v-if="shot.strokeType != 'Penalty'">
+                <v-list-item-avatar color="black">
+                  <span class="white--text">{{ getClubUsed(shot.club) }}</span>
+                </v-list-item-avatar>
+              </td>
+              <td v-else>
+                Penalty
+              </td>
+              <td class="text-capitalize">{{ shot.lie }}</td>
+              <td v-if="!shot.lostBall && shot.strokeType != 'Penalty'" class="font-weight-bold">{{ getShotDistance(shot.distance) }}</td>
+              <td v-else-if="!shot.lostBall"></td>
+              <td v-else><v-icon color="red">mdi-close-circle-outline</v-icon></td>
+              <td v-if="!shot.lostBall && shot.strokeType != 'Penalty'">{{ getShotDistance(shot.remaining) }}</td>
+              <td v-else></td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </v-window-item>
+    </v-window>
   </v-card>
+  </div>
 </template>
 
 <script>
